@@ -1,0 +1,47 @@
+schema_version: 1
+
+context:
+  version: "3.4.0"
+
+package:
+  name: vulkan-memory-allocator
+  version: ${{ version }}
+
+source:
+  url: https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 822aa850c6ce77346ae96a8a1d351d52e77e85929f35363849a0a4e638e0a2a1
+
+build:
+  number: 1
+  script:
+    - if: unix
+      then:
+        - mkdir -p ${PREFIX}/include/vma
+        - cp ${SRC_DIR}/include/vk_mem_alloc.h ${PREFIX}/include/vma/
+      else:
+        - mkdir %LIBRARY_PREFIX%\include\vma
+        - copy %SRC_DIR%\include\vk_mem_alloc.h %LIBRARY_PREFIX%\include\vma\
+
+requirements:
+  build:
+    - ${{ stdlib("c") }}
+
+tests:
+  - package_contents:
+      include:
+        - vma/vk_mem_alloc.h
+
+about:
+  homepage: https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+  summary: Easy to integrate Vulkan memory allocation library
+  description: |
+    Vulkan Memory Allocator (VMA) is a library designed to help developers
+    manage memory allocation in Vulkan applications.
+  license: MIT
+  license_file: LICENSE.txt
+  documentation: https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/
+  repository: https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+
+extra:
+  recipe-maintainers:
+    - JarrettSJohnson
